@@ -1,0 +1,62 @@
+Linux Commands:
+pwd - present working directory
+
+Navigational Commands:
+ls - list directory contents
+ls -l - long listing format
+ls -a - list all files including hidden files
+ls -lh - long listing format with human-readable file sizes
+
+cd - change directory
+cd .. - move up one directory
+cd /path/to/directory - change to specified directory
+
+File & directory operations
+mkdir directory_name - create a new directory
+mkdir -p /path/to/directory - create nested directories
+rmdir directory_name - remove an empty directory
+rm file_name - remove a file
+
+touch file_name - create an empty file or update the timestamp of an existing file
+echo "Welcome to Hadoop" > file_name - create a file with specified content
+cat file_name - display the contents of a file
+
+cp source_file destination_file - copy a file
+mv source_file destination_file - move or rename a file
+
+rm file_name - remove a file
+rm -r directory_name - remove a directory and its contents recursively
+rm -rf directory_name - forcefully remove a directory and its contents recursively
+
+head file_name - display the first 10 lines of a file
+tail file_name - display the last 10 lines of a file
+head -n 20 file_name - display the first 20 lines of a file
+
+
+Permissions and Ownership
+ls -l - long listing format to view file permissions
+ls -l file_name - display file permissions and ownership
+
+r - read
+w - write
+x - execute
+
+chmod 755 file_name - set read, write, execute permissions for owner; 
+read and execute for group and others
+
+chmod +x file_name - add execute permission to a file
+
+chown user:group file_name - change ownership of a file
+
+
+wc file_name - count lines, words, and characters in a file
+wc -l file_name - count lines in a file
+wc -w file_name - count words in a file
+wc -c file_name - count characters in a file
+
+
+df - display disk space usage
+df -h - display disk space usage in human-readable format
+du - display directory space usage
+du -h directory_name - display directory space usage in human-readable format
+
