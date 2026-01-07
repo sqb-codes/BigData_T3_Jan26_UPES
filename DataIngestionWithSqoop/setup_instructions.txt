@@ -1,0 +1,36 @@
+1. Build Sqoop Image
+docker build --platform=linux/amd64 -t sqoop-client .
+
+2. Run SQL + Sqoop Container
+docker network ls
+Replace <network_name> with your existing hadoop network name
+
+Start Container:
+docker-compose up -d
+
+3. Copy Hadoop configs from NameNode to host once:
+docker cp namenode:/opt/hadoop-*/etc/hadoop/ ./hadoop-configs
+
+4. Access MySQL Container
+docker exec -it mysql mysql -uroot -proot
+
+5. Access Sqoop Container
+docker exec -it sqoop bash
+
+
+6. Check sqoop version
+sqoop version
+
+Download required commons-lang jar...
+cd /opt/sqoop/lib
+wget https://repo1.maven.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.jar
+
+Verify the jar is present:
+ls /opt/sqoop/lib | grep commons-lang
+
+
+7. Test MySQL connection from Sqoop container:
+sqoop list-databases \
+--connect jdbc:mysql://mysql:3306 \
+--username root \
+--password root

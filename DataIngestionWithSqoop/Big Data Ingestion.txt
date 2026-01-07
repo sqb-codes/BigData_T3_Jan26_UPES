@@ -1,0 +1,170 @@
+Data Sources:
+- Social Media Platforms (e.g., Twitter, Facebook)
+- Web Logs
+- Sensor Data (IoT devices)
+- Transactional Databases
+- Public Datasets (e.g., government databases)
+- Streaming Data (e.g., Kafka, Kinesis)
+- APIs (e.g., RESTful services)
+
+
+Data Ingestion:
+- Process of collecting, importing and transferring data from multiple sources into a Big Data System for storage and analysis
+
+Source -> Ingestion Tool -> Storage -> Processing -> Analysis
+
+Types of Ingestion:
+1. Batch Ingestion
+2. Streaming Ingestion
+3. Hybrid Ingestion
+
+Batch Ingestion:
+- Data is collected and transferred in large chunks at scheduled intervals
+- Suitable for non-time-sensitive data
+- Tools: Apache Sqoop, Apache Nifi, Talend
+
+Streaming Ingestion:
+- Data is ingested in real-time or near real-time as it is generated
+- Suitable for time-sensitive data
+- Tools: Apache Kafka, Apache Flume, Amazon Kinesis
+
+Hybrid Ingestion:
+- Combines both batch and streaming ingestion methods
+- Allows flexibility based on data requirements
+- Tools: Apache Nifi, StreamSets
+
+ETL vs ELT
+- ETL (Extract, Transform, Load): Data is transformed before loading into the storage system
+
+Source -> Transform -> Load -> Storage
+
+- Transform before storage
+- Traditionally used in data warehousing
+
+- ELT (Extract, Load, Transform): Data is loaded into the storage system first and then transformed as needed
+
+Source -> Load -> Storage -> Transform
+
+- Transform after storage
+- Commonly used in Big Data systems where storage is scalable and transformation can be done on-demand
+
+
+Data Ingestion Pipelines:
+- Pipelines automate the data ingestion process
+- Automated workflow that continuously or periodically moves data from sources to storage systems
+
+=============================================
+
+Techniques for Ingesting batch data:
+- Batch ingestion is the process of transferring large volumes of data at scheduled intervals from sources to a big data storage system.
+
+- Common techniques include:
+1. File Transfer Protocols (FTP/SFTP):
+   - Used to transfer files from one system to another over a network.
+   - Suitable for large files and datasets.
+2. Database Export/Import:
+   - Export data from relational databases using tools like mysqldump or pg_dump.
+   - Import data into big data systems using tools like Apache Sqoop.
+3. Data Warehouse:
+   - Extract data from traditional data warehouses and load it into big data storage systems.
+   - Tools like Talend and Apache Nifi can facilitate this process.
+
+
+Without Sqoop:
+1. Manually export data from RDBMS to flat files.
+2. Transfer flat files to HDFS using HDFS commands.
+3. Custom scripts to parse and load data into Hadoop ecosystem.
+
+What is Sqoop?
+- Apache Sqoop is a tool designed for efficiently transferring bulk data between relational databases and Hadoop.
+- It automates the process of importing and exporting data, making it easier to move large datasets.
+
+Key Features of Sqoop:
+- Parallel Data Transfer: Sqoop can split the data transfer into multiple parallel tasks, speeding up the process.
+- Uses MapReduce: Sqoop leverages Hadoop's MapReduce framework for data transfer, ensuring scalability and fault tolerance.
+- Supports Various Databases: Sqoop supports a wide range of relational databases, including MySQL, PostgreSQL, Oracle, SQL Server, and more.
+- Support import and export operations: Sqoop can import data from RDBMS to Hadoop and export data from Hadoop to RDBMS.
+
+Internal Working of Sqoop:
+1. Sqoop connects to the source database using JDBC.
+2. Retreives metadata about the tables to be imported/exported.
+3. Launches MapReduce jobs to perform the data transfer in parallel.
+4. Each mapper pulls a chunk of data from the source database.
+5. Data is written to HDFS or other Hadoop storage systems (HBase, Hive) during import.
+
+
+Sqoop Import Example (MySQL to HDFS):
+sqoop import \
+--connect jdbc:mysql://localhost:3306/mydatabase \
+--username myuser \
+--password mypassword \
+--table mytable \
+--target-dir /user/hadoop/mytable_data \
+--num-mappers 4
+
+Sqoop Import specific columns:
+sqoop import \
+--connect jdbc:mysql://localhost:3306/mydatabase \
+--username myuser \
+--password mypassword \
+--table mytable \
+--columns id, name, marks \
+--target-dir /user/hadoop/mytable_data \
+--num-mappers 4
+
+
+Sqoop Import with conditions:
+sqoop import \
+--connect jdbc:mysql://localhost:3306/mydatabase \
+--username myuser \
+--password mypassword \
+--table mytable \
+--columns id, name, marks \
+--where "marks > 80" \
+--target-dir /user/hadoop/mytable_data \
+--num-mappers 4
+
+
+Sqoop Export Example (HDFS to MySQL):
+sqoop export \
+--connect jdbc:mysql://localhost:3306/mydatabase \
+--username myuser \
+--password mypassword \
+--table mytable \
+--export-dir /data/mytable_data \
+--num-mappers 4
+
+
+Sqoop Jobs:
+- Sqoop jobs allow you to save and schedule import/export tasks for later execution.
+
+Creating a Sqoop Job:
+sqoop job \
+--create import_students_data \
+-- import \
+--connect jdbc:mysql://localhost:3306/mydatabase \
+--username myuser \
+--password mypassword \
+--table mytable \
+--target-dir /user/hadoop/mytable_data \
+--num-mappers 4
+
+Executing a Sqoop Job:
+sqoop job --exec import_students_data
+
+
+Incremental Imports:
+- Sqoop supports incremental imports to fetch only new or updated data since the last import.
+
+Types of Incremental Imports:
+1. Append Mode: Imports new rows added since the last import.
+--incremental append \
+--check-column id \
+--last-value 100
+
+2. Lastmodified Mode: Imports rows that have been updated since the last import.
+--incremental lastmodified \
+--check-column last_updated \
+--last-value '2026-01-01 00:00:00'
+
+

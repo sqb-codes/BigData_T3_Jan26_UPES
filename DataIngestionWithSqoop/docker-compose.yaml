@@ -1,0 +1,30 @@
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - bigdatat3-jan_hadoop # replace with your existing hadoop network name
+
+  sqoop:
+    image: sqoop-client
+    container_name: sqoop
+    tty: true
+    volumes:
+      - ./hadoop-conf:/etc/hadoop
+    depends_on:
+      - mysql
+    networks:
+      - bigdatat3-jan_hadoop # replace with your existing hadoop network name
+
+networks:
+  bigdatat3-jan_hadoop: # replace with your existing hadoop network name
+    external: true
+
+volumes:
+  mysql_data:
