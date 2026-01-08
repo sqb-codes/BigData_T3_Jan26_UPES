@@ -1,0 +1,62 @@
+Real-time Ingestion in Big Data
+- Data is ingested in real-time or near real-time as it is generated
+- Suitable for time-sensitive data
+- Tools: Apache Kafka, Apache Flume, Amazon Kinesis
+
+
+Messaging Queues Systems:
+- enables applications to communicate and exchange data asynchronously by sending message through a queue.
+- Producers send messages without waiting for consumers to process them immediately.
+- This decouples systems, improves scalability, and enhances fault tolerance and also ensures reliable data delivery.
+- Examples: Apache Kafka, RabbitMQ, Amazon SQS
+
+Suppose an online shopping website sends order events to a queue, while inventory, payment and notification services consume these events independently.
+- This allows the website to handle high traffic without delays, while other services process orders at their own pace.
+
+Architecture of Messaging Queue System:
+Message queue architecture consists of producer, queue/topics, brokers, and consumer components.
+Producer publish the messages to the broker which stores them in the queue until consumers retrieve and process them.
+Consumer read messages at their own pace, enabling fault tolerance and load balancing.
+
+1. Producer: Application that sends messages to the queue.
+2. Queue: Temporary storage that holds messages until they are processed.
+3. Consumer: Application that retrieves and processes messages from the queue.
+
+
+Broker vs Broker-less Messaging:
+- Broker based systems uses a central server to store and route messages.
+- Broker-less systems allow direct communication between producers and consumers without an intermediary.
+
+Examples:
+- Broker based: Apache Kafka, RabbitMQ
+- Broker-less: ZeroMQ, Redis Pub/Sub
+
+
+Distributed Broker:
+- A distributed broker system consists of multiple broker nodes that work together to handle large volumes of messages.
+- Data is partitioned across brokers for scalability and fault tolerance.
+- Netflix uses distributed Kafka brokers to process millions of streaming events per second.
+
+
+Apache Kafka:
+- Distributed, fault tolerant, high-throughput messaging system designed for real-time data streaming.
+- It stores data in topics and allows multiple producers and consumers to read and write data concurrently.
+
+
+Kafka Broker:
+- Kafka broker is a server that stores topic partitions and servers data to consumers.
+- Multiple brokers form a Kafka cluster for scalability and fault tolerance.
+
+Kafka Producer:
+- Publishes messages to Kafka topics.
+- Producer decide which partition a message goes to based on a key or round-robin.
+
+Kakfka Consumer:
+- Reads messages from Kafka topics.
+- Consumers can work independently or in a consumer group for load balancing.
+
+
+Zookeeper - manages metadata and coordinates Kafka brokers in a cluster.
+Kafka broker - stores messages
+Kafka producer - sends messages to topics
+Kafka consumer - retrieves messages from topics
