@@ -1,36 +1,79 @@
-1. Build Sqoop Image
-docker build --platform=linux/amd64 -t sqoop-client .
+Prerequisites
+- Host Machine
+  - Windows / macOS / Linux
+  - Docker Desktop installed and running
 
-2. Run SQL + Sqoop Container
-docker network ls
-Replace <network_name> with your existing hadoop network name
+Setup docker-compose.yaml in VS Code
 
-Start Container:
+Start the Docker Containers
 docker-compose up -d
+This will start two containers:
+- MySQL Database Container
+- Hadoop Container
 
-3. Copy Hadoop configs from NameNode to host once:
-docker cp namenode:/opt/hadoop-*/etc/hadoop/ ./hadoop-configs
+Verify Hadoop & MapReduce
+docker exec -it hadoop bash
 
-4. Access MySQL Container
-docker exec -it mysql mysql -uroot -proot
+Check HDFS & YARN
+hdfs dfs -ls /
+yarn node -list
 
-5. Access Sqoop Container
-docker exec -it sqoop bash
+Run MapReduce test (MANDATORY)
+hadoop jar /hadoop-2.8.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.2.jar pi 1 1
+
+exit from hadoop container:
+exit
+
+Download Sqoop
+https://archive.apache.org/dist/sqoop/1.4.7/sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz
+
+In mac/linux:
+wget https://archive.apache.org/dist/sqoop/1.4.7/sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz
+
+Copy into container:
+docker cp sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz hadoop:/opt/
 
 
-6. Check sqoop version
+Download MySQL JDBC Driver:
+https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.28/mysql-connector-java-8.0.28.jar
+
+In mac:
+wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.28/mysql-connector-java-8.0.28.jar
+
+Copy into container:
+docker cp mysql-connector-java-8.0.28.jar hadoop:/opt/
+
+
+docker exec -it hadoop bash
+cd /opt
+tar -xvzf sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz
+mv sqoop-1.4.7.bin__hadoop-2.6.0 sqoop
+
+
+Set environment variables:
+export SQOOP_HOME=/opt/sqoop
+export PATH=$PATH:$SQOOP_HOME/bin
+
+Persist:
+echo 'export SQOOP_HOME=/opt/sqoop' >> ~/.bashrc
+echo 'export PATH=$PATH:$SQOOP_HOME/bin' >> ~/.bashrc
+source ~/.bashrc
+
+Verify:
 sqoop version
 
-Download required commons-lang jar...
-cd /opt/sqoop/lib
-wget https://repo1.maven.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.jar
 
-Verify the jar is present:
-ls /opt/sqoop/lib | grep commons-lang
+Place in Sqoop lib:
+cp /opt/mysql-connector-java-8.0.28.jar $SQOOP_HOME/lib/
+
+Verify:
+ls $SQOOP_HOME/lib/ | grep mysql
 
 
-7. Test MySQL connection from Sqoop container:
+Verify MySQL Connectivity:
 sqoop list-databases \
---connect jdbc:mysql://mysql:3306 \
+--connect jdbc:mysql://mysql:3306/ \
 --username root \
 --password root
+
+

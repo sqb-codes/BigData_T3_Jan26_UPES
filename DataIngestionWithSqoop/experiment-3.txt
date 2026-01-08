@@ -1,0 +1,36 @@
+Importing data using Sqoop  
+1.	Login to MySQL 
+2.	Create a database upes_db 
+3.	Create table students in the upes_db database
+4.	Using Sqoop transfer all the data of students table into HDFS. 
+5.	Using Sqoop transfer all the data of students table into HDFS to a specific folder students_1. 
+6.	Using Sqoop transfer all the data of students table who are studying Physics subject into HDFS to a specific folder students_2. 
+7.	Using Sqoop transfer all the data of students table who are studying Computer subject into HDFS to a specific folder students_pass, without specifying the password on the command line. 
+8.	Import students table from MySQL as a text file to the destination folder students_text. Fields should be terminated by a tab character ("\t") character and lines should be terminated by newline character ("\n"). 
+
+
+1. docker exec -it mysql mysql -uroot -proot
+2. CREATE DATABASE upes_db;
+   USE upes_db;
+3. CREATE TABLE students (
+   id INT PRIMARY KEY,
+   name VARCHAR(50),
+   age INT,
+   subject VARCHAR(50)
+);
+
+INSERT INTO students (id, name, age, subject) VALUES
+(1, 'Alice', 20, 'Physics'),
+(2, 'Bob', 21, 'Chemistry'),
+(3, 'Charlie', 22, 'Mathematics'),
+(4, 'David', 23, 'Computer'),
+(5, 'Eve', 20, 'Physics');
+
+4. sqoop import \
+--connect jdbc:mysql://mysql:3306/upes_db \
+--username root \
+--password root \
+--table students \
+--target-dir /sqoop/upes/students \
+--as-textfile \
+--num-mappers 1
