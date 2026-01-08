@@ -9,3 +9,13 @@ kafka-topics --create --topic orders --bootstrap-server localhost:9092 --partiti
 
 List Kafka topics:
 kafka-topics --list --bootstrap-server localhost:9092
+
+
+Kafka Producer:
+kafka-console-producer --topic orders --bootstrap-server localhost:9092
+
+Kafka Consumer:
+kafka-console-consumer --topic orders --bootstrap-server localhost:9092 --from-beginning
+
+
+docker cp producer.py kafka:/producer.py
